@@ -23,10 +23,12 @@ android {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
   }
+
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
   }
+
   kotlinOptions {
     jvmTarget = "11"
   }
@@ -38,6 +40,12 @@ dependencies {
   implementation(libs.material)
   implementation(libs.androidx.activity)
   implementation(libs.androidx.constraintlayout)
+
+  // Thêm Navigation Component
+  implementation("androidx.navigation:navigation-fragment-ktx:2.8.4")
+  implementation("androidx.navigation:navigation-ui-ktx:2.8.4")
+
+  // Test dependencies
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)

@@ -1,4 +1,5 @@
 package vn.edu.hust.studentman
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -9,12 +10,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
-import vn.edu.hust.studentman.R
-import vn.edu.hust.studentman.Student
+import androidx.navigation.fragment.findNavController
+import vn.edu.hust.studentman.databinding.FragmentStudentListBinding
 
-class StudentListFragment : Fragment() {
+class StudentListFragment<FragmentStudentListBinding> : Fragment() {
 
-    private lateinit var listView: ListView
+    private lateinit var binding: FragmentStudentListBinding
     private lateinit var students: ArrayList<Student>
     private lateinit var adapter: ArrayAdapter<Student>
 
@@ -22,21 +23,18 @@ class StudentListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_student_list, container, false)
-        listView = view.findViewById(R.id.studentListView)
+        binding = FragmentStudentListBinding.inflate(inflater, container, false)
 
-        // Danh sách mẫu
         students = arrayListOf(
             Student("Nguyen Van A", "12345"),
             Student("Le Van B", "67890")
         )
 
-        // Adapter
         adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, students)
-        listView.adapter = adapter
+        binding.studentListView.adapter = adapter
 
-        // Context menu
-        listView.setOnItemClickListener { _, _, position, _ ->
+        // Khi chọn một item trong danh sách
+        binding.studentListView.setOnItemClickListener { _, _, position, _ ->
             val action = StudentListFragmentDirections.actionToEditStudentFragment(
                 studentName = students[position].name,
                 studentId = students[position].studentId,
@@ -45,13 +43,8 @@ class StudentListFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        return view
-    }
-
-    // Xử lý menu
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
