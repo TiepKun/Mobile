@@ -1,21 +1,17 @@
 package vn.edu.hust.studentman
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import vn.edu.hust.studentman.databinding.FragmentStudentListBinding
 
-class StudentListFragment<FragmentStudentListBinding> : Fragment() {
+class StudentListFragment : Fragment() {
 
-    private lateinit var binding: FragmentStudentListBinding
+    private var _binding: FragmentStudentListBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var students: ArrayList<Student>
     private lateinit var adapter: ArrayAdapter<Student>
 
@@ -23,21 +19,25 @@ class StudentListFragment<FragmentStudentListBinding> : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentStudentListBinding.inflate(inflater, container, false)
+        // Inflate the layout using View Binding
+        _binding = FragmentStudentListBinding.inflate(inflater, container, false)
 
+        // Initialize sample student data
         students = arrayListOf(
             Student("Nguyen Van A", "12345"),
             Student("Le Van B", "67890")
         )
 
+        // Initialize and set adapter
         adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, students)
         binding.studentListView.adapter = adapter
 
-        // Khi chọn một item trong danh sách
+        // Handle item click in the list
         binding.studentListView.setOnItemClickListener { _, _, position, _ ->
+            val selectedStudent = students[position]
             val action = StudentListFragmentDirections.actionToEditStudentFragment(
-                studentName = students[position].name,
-                studentId = students[position].studentId,
+                studentName = selectedStudent.name,
+                studentId = selectedStudent.studentId,
                 position = position
             )
             findNavController().navigate(action)
@@ -60,5 +60,10 @@ class StudentListFragment<FragmentStudentListBinding> : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

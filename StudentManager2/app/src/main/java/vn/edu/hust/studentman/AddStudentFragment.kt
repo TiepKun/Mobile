@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import vn.edu.hust.studentman.R
+import androidx.navigation.fragment.findNavController
 
 class AddStudentFragment : Fragment() {
 

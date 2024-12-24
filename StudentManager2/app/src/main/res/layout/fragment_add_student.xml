@@ -6,13 +6,13 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/studentName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter name" />
 
     <EditText
-        android:id="@+id/studentIdEditText"
+        android:id="@+id/studentId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter student ID" />

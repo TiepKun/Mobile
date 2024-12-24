@@ -4,6 +4,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import android.os.Bundle
+import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+
 import vn.edu.hust.studentman.R
 
 class EditStudentFragment : Fragment() {
@@ -22,9 +26,11 @@ class EditStudentFragment : Fragment() {
         saveButton = view.findViewById(R.id.saveButton)
 
         // Nhận dữ liệu từ StudentListFragment
-        val args = EditStudentFragmentArgs.fromBundle(requireArguments())
-        nameEditText.setText(args.studentName)
-        studentIdEditText.setText(args.studentId)
+        val args = arguments?.let { EditStudentFragmentArgs.fromBundle(it) }
+        args?.let {
+            nameEditText.setText(it.studentName)
+            studentIdEditText.setText(it.studentId)
+        }
 
         saveButton.setOnClickListener {
             val updatedName = nameEditText.text.toString()
@@ -35,7 +41,7 @@ class EditStudentFragment : Fragment() {
                 val action = EditStudentFragmentDirections.actionEditStudentFragmentToStudentListFragment(
                     studentName = updatedName,
                     studentId = updatedStudentId,
-                    position = args.position
+                    position = args?.position
                 )
                 findNavController().navigate(action)
             }
