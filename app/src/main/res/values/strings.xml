@@ -1,3 +1,4 @@
 <resources>
-    <string name="add_student">Thêm Sinh Viên</string>
+    <string name="add_student">Add Student</string>
+    <string name="app_name">Room Student Manager</string>
 </resources>

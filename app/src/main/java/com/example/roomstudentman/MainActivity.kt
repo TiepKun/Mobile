@@ -1,5 +1,5 @@
 package com.example.roomstudentman
-
+import android.widget.Toast
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -17,7 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var studentViewModel: StudentViewModel<Any?>
+    private lateinit var studentViewModel: StudentViewModel
     private lateinit var studentAdapter: StudentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,23 +59,17 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                studentViewModel.filterStudents(newText.orEmpty())
+                studentViewModel.filter(newText.orEmpty())
+                studentViewModel.filteredStudents.observe(this@MainActivity) { students ->
+                    studentAdapter.submitList(students)
+                }
                 return true
             }
         })
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_add_student -> {
-                val intent = Intent(this, AddStudentActivity::class.java)
-                startActivity(intent)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+
 
     private fun deleteSelectedStudents() {
         val selectedIds = studentAdapter.getSelectedStudents().map { it.id }
@@ -93,13 +87,14 @@ class MainActivity : AppCompatActivity() {
                 val selectedIds = studentAdapter.getSelectedStudents().map { it.id }
                 if (selectedIds.isNotEmpty()) {
                     studentViewModel.deleteSelectedStudents(selectedIds)
-                    Toast.makeText(this, "Đã xóa các sinh viên được chọn", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Delete student", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "Không có sinh viên nào được chọn", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "No student has been selected", Toast.LENGTH_SHORT).show()
                 }
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }

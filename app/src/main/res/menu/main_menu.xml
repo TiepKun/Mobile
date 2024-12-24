@@ -1,14 +1,22 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_search"
         android:title="Search"
         android:icon="@drawable/ic_search"
-        android:showAsAction="ifRoom|collapseActionView"
-        android:actionViewClass="android.widget.SearchView" />
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.widget.SearchView" />
 
     <item
         android:id="@+id/action_add_student"
         android:title="Add Student"
         android:icon="@drawable/ic_add"
-        android:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_delete_selected"
+        android:title="Delete"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom" />
 </menu>

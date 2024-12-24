@@ -3,7 +3,7 @@ package com.example.roomstudentman.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.roomstudentman.database.StudentDatabase
 import com.example.roomstudentman.entity.Student
@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 
 class StudentViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: StudentRepository
-    var allStudents: LiveData<List<Student>>
+    val allStudents: LiveData<List<Student>>
+    val filteredStudents = MediatorLiveData<List<Student>>()
 
     init {
         val studentDao = StudentDatabase.getInstance(application).studentDao()
@@ -20,8 +21,13 @@ class StudentViewModel(application: Application) : AndroidViewModel(application)
         allStudents = repository.allStudents
     }
 
-    fun searchStudents(query: String): LiveData<List<Student>> {
-        return repository.searchStudents(query)
+    fun filter(keyword: String) {
+        filteredStudents.addSource(allStudents) { students ->
+            filteredStudents.value = students.filter { student ->
+                student.name.contains(keyword, ignoreCase = true) ||
+                        student.mssv.contains(keyword, ignoreCase = true)
+            }
+        }
     }
 
     fun insertStudent(student: Student) {
@@ -47,18 +53,4 @@ class StudentViewModel(application: Application) : AndroidViewModel(application)
             repository.deleteSelectedStudents(ids)
         }
     }
-
-    fun filter(keyword: String): LiveData<List<Student>> {
-        val filteredStudents = MutableLiveData<List<Student>>()
-        allStudents.observeForever { students ->
-            val result = students.filter {
-                it.name.contains(keyword, ignoreCase = true) ||
-                        it.mssv.contains(keyword, ignoreCase = true)
-            }
-            filteredStudents.value = result
-        }
-        return filteredStudents
-    }
-
-
 }
